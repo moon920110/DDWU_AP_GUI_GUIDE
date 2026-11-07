@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Java Swing GUI 따라하기 가이드</title>
+<meta name="description" content="JFrame부터 JTable, JOptionPane까지 8단계로 따라 하는 Java Swing GUI 가이드. 코드와 실행 화면을 번호로 연결해 보고, 브라우저에서 바로 동작을 확인할 수 있습니다.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='5' width='26' height='22' rx='3' fill='%23fff' stroke='%237488c0' stroke-width='3'/%3E%3Crect x='3' y='5' width='26' height='7' fill='%237488c0'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>Java Swing GUI 따라하기</a>
+  <span class="spacer"></span>
+  <div class="progress-pill" id="progress" aria-live="polite">
+    <span class="txt">완료 <b id="progress-count">0</b> / 8 단계</span>
+    <span class="bar"><i id="progress-bar"></i></span>
+  </div>
+  <button class="icon-btn" id="theme-toggle" type="button" aria-label="밝은 화면 / 어두운 화면 전환">
+    <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  </button>
+</header>
+
+<div class="layout" id="top">
+  <nav class="rail" aria-label="단계 목차">
+    <div class="rail-head">단계</div>
+    <ol id="toc">
+      <li data-step="1"><a href="#step-1"><span class="num"><span>1</span></span><span class="label"><span class="label-long">빈 창 띄우기</span><span class="label-short">JFrame</span></span></a></li>
+      <li data-step="2"><a href="#step-2"><span class="num"><span>2</span></span><span class="label"><span class="label-long">글자와 버튼</span><span class="label-short">JLabel · JButton</span></span></a></li>
+      <li data-step="3"><a href="#step-3"><span class="num"><span>3</span></span><span class="label"><span class="label-long">입력 받기</span><span class="label-short">JTextField</span></span></a></li>
+      <li data-step="4"><a href="#step-4"><span class="num"><span>4</span></span><span class="label"><span class="label-long">고르기</span><span class="label-short">JComboBox</span></span></a></li>
+      <li data-step="5"><a href="#step-5"><span class="num"><span>5</span></span><span class="label"><span class="label-long">목록과 표</span><span class="label-short">JList · JTable</span></span></a></li>
+      <li data-step="6"><a href="#step-6"><span class="num"><span>6</span></span><span class="label"><span class="label-long">배치하기</span><span class="label-short">레이아웃</span></span></a></li>
+      <li data-step="7"><a href="#step-7"><span class="num"><span>7</span></span><span class="label"><span class="label-long">대화상자와 메뉴</span><span class="label-short">JOptionPane</span></span></a></li>
+      <li data-step="8"><a href="#step-8"><span class="num"><span>8</span></span><span class="label"><span class="label-long">종합 예제</span><span class="label-short">성적 관리</span></span></a></li>
+    </ol>
+    <div class="divider"></div>
+    <ol>
+      <li><a href="#trouble"><span class="num"><span>?</span></span><span class="label"><span class="label-long">막혔을 때 확인할 것</span><span class="label-short">막혔을 때</span></span></a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <h1>Java Swing GUI 따라하기 가이드<small>JFrame에서 성적 관리 프로그램까지, 8단계</small></h1>
+      <p class="lede">단계마다 코드를 그대로 따라 치고 실행한 뒤, 실행 화면과 같은지 확인하세요. 각 단계에는 브라우저에서 바로 눌러 볼 수 있는 <b>직접 해보기</b> 창이 있어서, 내 프로그램이 어떻게 움직여야 하는지 먼저 확인할 수 있습니다.</p>
+
+      <div class="howto" id="howto">
+        <div><strong><i class="n" data-n="1">1</i> 표에서 번호를 찾고</strong>어떤 코드가 어떤 화면을 만드는지 한 줄로 적혀 있습니다.</div>
+        <div><strong><i class="n" data-n="1">1</i> 코드에서 같은 번호의 줄을 본 다음</strong>주석의 번호를 누르거나 마우스를 올리면 표와 화면의 같은 번호가 함께 켜집니다.</div>
+        <div><strong><i class="n" data-n="1">1</i> 화면에서 그 번호가 붙은 곳을 봅니다</strong>실행 화면의 주황색 번호와 직접 해보기 창의 번호가 같은 부분입니다.</div>
+      </div>
+
+      <h3 style="margin-top:32px;font-size:16px">준비물</h3>
+      <table>
+        <tbody>
+          <tr><td class="k">JDK</td><td>8 이상. 터미널에서 <code>java -version</code> 으로 확인</td></tr>
+          <tr><td class="k">편집기</td><td>IntelliJ IDEA, Eclipse, VS Code 중 아무거나</td></tr>
+          <tr><td class="k">파일 이름</td><td>클래스 이름과 같아야 함. <code>HelloFrame</code> 클래스 → <code>HelloFrame.java</code></td></tr>
+          <tr><td class="k">실행</td><td>편집기에서 <code>main</code> 이 있는 파일을 Run. 터미널이라면 <code>javac -encoding UTF-8 HelloFrame.java</code> 다음 <code>java HelloFrame</code></td></tr>
+        </tbody>
+      </table>
+      <div class="note"><p>실행 화면은 Swing 기본 모양(Metal 테마)으로 찍었습니다. 버튼과 입력칸 모양은 여러분 화면과 같지만, 창 테두리와 제목 표시줄은 Windows나 macOS 모양으로 다르게 보일 수 있습니다. 이 페이지의 <b>직접 해보기</b> 창도 Metal 모양을 흉내 낸 것입니다.</p></div>
+    </section>
+
+    <!-- ================= STEP 1 ================= -->
+    <section class="step" id="step-1" data-step="1">
+      <div class="step-head">
+        <div class="stepno">1</div>
+        <h2>빈 창 띄우기<span>JFrame</span></h2>
+        <label class="done-toggle"><input type="checkbox" data-done="1"> 따라 했어요</label>
+      </div>
+      <p>JFrame을 상속한 클래스를 만들고 <code>main</code> 에서 <code>setVisible(true)</code> 를 부르면 창이 하나 뜹니다. 모든 GUI 프로그램은 이 뼈대에서 시작합니다.</p>
+
+      <table class="ntable">
+        <thead><tr><th>번호</th><th>코드</th><th>화면에서 일어나는 일</th></tr></thead>
+        <tbody>
+          <tr data-n="1"><td><i class="n" data-n="1">1</i></td><td><code>setTitle("나의 첫 GUI")</code></td><td>제목 표시줄에 글자가 나옴</td></tr>
+          <tr data-n="2"><td><i class="n" data-n="2">2</i></td><td><code>setSize(320, 200)</code></td><td>창 크기가 가로 320, 세로 200픽셀이 됨</td></tr>
+          <tr><td></td><td><code>setLocationRelativeTo(null)</code></td><td>창이 모니터 가운데에 뜸</td></tr>
+          <tr><td></td><td><code>setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)</code></td><td>X를 누르면 프로그램이 끝남. 없으면 창만 사라지고 프로그램은 계속 실행됨</td></tr>
+          <tr><td></td><td><code>setVisible(true)</code></td><td>창이 화면에 나타남. 항상 맨 마지막에 부름</td></tr>
+        </tbody>
+      </table>
+
+      <div class="codeblock" data-code="HelloFrame.java"></div>
+      <script type="text/x-java" data-file="HelloFrame.java">
+import javax.swing.*;
+
+public class HelloFrame extends JFrame {
+
+    public HelloFrame() {
+        setTitle("나의 첫 GUI");                                 // ① 제목 표시줄 글자
+        setSize(320, 200);                                       // ② 창 크기 (가로 320, 세로 200)
+        setLocationRelativeTo(null);                             // 화면 가운데에 띄우기
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);          // X를 누르면 프로그램 종료
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new HelloFrame().setVisible(true));
+    }
+}
+</script>
+      <div class="note"><p><code>SwingUtilities.invokeLater(...)</code> 는 "화면 담당 스레드에서 창을 만들어라"는 뜻입니다. 지금은 모든 예제의 <code>main</code> 에 그대로 쓴다고만 기억하세요.</p></div>
+
+      <div class="screen">
+        <div class="seg" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-panel="shot">실행 화면</button>
+          <button type="button" role="tab" aria-selected="false" data-panel="try">직접 해보기</button>
+        </div>
+        <div class="panel panel-shot">
+          <div class="shot"><img src="assets/img/step1-helloframe.png" alt="나의 첫 GUI 라는 제목의 빈 창. ①이 제목 표시줄을, ②가 가로 320 세로 200 크기를 가리킨다" loading="lazy"></div>
+        </div>
+        <div class="panel panel-try" hidden>
+          <div class="demo" data-demo="hello"></div>
+          <p class="screen-caption">창 오른쪽 위의 X를 눌러 보세요. <code>setDefaultCloseOperation</code> 줄을 뺀 상태로 실행하면 창은 사라져도 프로그램은 끝나지 않습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STEP 2 ================= -->
+    <section class="step" id="step-2" data-step="2">
+      <div class="step-head">
+        <div class="stepno">2</div>
+        <h2>글자와 버튼<span>JLabel, JButton</span></h2>
+        <label class="done-toggle"><input type="checkbox" data-done="2"> 따라 했어요</label>
+      </div>
+      <p>JLabel은 글자를 보여주고, JButton은 누를 수 있는 버튼입니다. 버튼을 눌렀을 때 할 일은 <code>addActionListener</code> 로 등록합니다.</p>
+
+      <table class="ntable">
+        <thead><tr><th>번호</th><th>코드</th><th>화면에서 일어나는 일</th></tr></thead>
+        <tbody>
+          <tr data-n="1"><td><i class="n" data-n="1">1</i></td><td><code>new JLabel("0번 눌렀어요", SwingConstants.CENTER)</code></td><td>가운데 정렬된 글자가 나옴</td></tr>
+          <tr data-n="2"><td><i class="n" data-n="2">2</i></td><td><code>new JButton("눌러 보세요")</code></td><td>아래쪽에 버튼이 나옴</td></tr>
+          <tr data-n="3"><td><i class="n" data-n="3">3</i></td><td><code>addActionListener(e -> { ... })</code> 안의 <code>setText(...)</code></td><td>버튼을 누를 때마다 ①의 글자가 바뀜</td></tr>
+          <tr><td></td><td><code>setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24))</code></td><td>글자 크기 24, 굵게</td></tr>
+          <tr><td></td><td><code>add(①, BorderLayout.CENTER)</code>, <code>add(②, BorderLayout.SOUTH)</code></td><td>①은 가운데, ②는 아래쪽에 배치 (<a href="#step-6">6단계</a> 참고)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="codeblock" data-code="ClickCounter.java"></div>
+      <script type="text/x-java" data-file="ClickCounter.java">
+import javax.swing.*;
+import java.awt.*;
+
+public class ClickCounter extends JFrame {
+    private int count = 0;
+    private JLabel countLabel = new JLabel("0번 눌렀어요", SwingConstants.CENTER);  // ① 글자 표시
+    private JButton clickButton = new JButton("눌러 보세요");                       // ② 버튼
+
+    public ClickCounter() {
+        setTitle("클릭 카운터");
+        setLayout(new BorderLayout());
+
+        countLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));   // 글자 크기 24, 굵게
+        clickButton.addActionListener(e -> {                            // ③ 버튼을 누르면 실행
+            count++;
+            countLabel.setText(count + "번 눌렀어요");                   // 라벨 글자 바꾸기
+        });
+
+        add(countLabel, BorderLayout.CENTER);
+        add(clickButton, BorderLayout.SOUTH);
+
+        setSize(320, 200);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new ClickCounter().setVisible(true));
+    }
+}
+</script>
+      <div class="note"><p><code>e -> { ... }</code> 는 람다식입니다. "버튼이 눌리면 중괄호 안을 실행해라"라고 읽으면 됩니다.</p></div>
+
+      <div class="screen">
+        <div class="seg" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-panel="shot">실행 화면</button>
+          <button type="button" role="tab" aria-selected="false" data-panel="try">직접 해보기</button>
+        </div>
+        <div class="panel panel-shot">
+          <div class="shot"><img src="assets/img/step2-clickcounter.png" alt="클릭 카운터 창. 왼쪽은 실행 직후 0번 눌렀어요, 오른쪽은 버튼을 3번 누른 뒤 3번 눌렀어요" loading="lazy"></div>
+          <p class="screen-caption">왼쪽: 실행 직후, 오른쪽: 버튼을 3번 누른 뒤</p>
+        </div>
+        <div class="panel panel-try" hidden>
+          <div class="demo" data-demo="counter"></div>
+          <p class="screen-caption">버튼을 누를 때마다 ③의 람다식이 실행되어 ①의 글자가 바뀝니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STEP 3 ================= -->
+    <section class="step" id="step-3" data-step="3">
+      <div class="step-head">
+        <div class="stepno">3</div>
+        <h2>입력 받기<span>JTextField, JPasswordField, JTextArea</span></h2>
+        <label class="done-toggle"><input type="checkbox" data-done="3"> 따라 했어요</label>
+      </div>
+      <p>한 줄 입력은 JTextField, 비밀번호는 JPasswordField, 여러 줄 글자는 JTextArea를 씁니다. 입력한 내용은 <code>getText()</code> 로 읽고, <code>setText()</code> 로 바꾸거나 비웁니다.</p>
+
+      <table class="ntable">
+        <thead><tr><th>번호</th><th>코드</th><th>화면에서 일어나는 일</th></tr></thead>
+        <tbody>
+          <tr data-n="1"><td><i class="n" data-n="1">1</i></td><td><code>new JTextField(12)</code>, <code>getText()</code>, <code>setText("")</code></td><td>이름 입력칸. 입력한 글자를 읽고, 다 쓴 뒤 비움</td></tr>
+          <tr data-n="2"><td><i class="n" data-n="2">2</i></td><td><code>new JPasswordField(12)</code>, <code>getPassword()</code></td><td>입력하면 ●로 가려짐. 내용은 <code>char[]</code> 로 읽음</td></tr>
+          <tr data-n="3"><td><i class="n" data-n="3">3</i></td><td><code>new JTextArea(5, 24)</code>, <code>append(...)</code></td><td>5줄짜리 글자 영역. <code>append</code> 는 맨 뒤에 이어 붙임</td></tr>
+          <tr data-n="4"><td><i class="n" data-n="4">4</i></td><td><code>new JButton("확인")</code> + <code>addActionListener</code></td><td>누르면 ①②를 읽어서 ③에 한 줄을 추가</td></tr>
+          <tr><td></td><td><code>setEditable(false)</code></td><td>③을 사용자가 직접 고칠 수 없음</td></tr>
+          <tr><td></td><td><code>pack()</code></td><td>내용 크기에 맞춰 창 크기를 자동으로 정함 (<code>setSize</code> 대신)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="codeblock" data-code="InputForm.java"></div>
+      <script type="text/x-java" data-file="InputForm.java">
+import javax.swing.*;
+import java.awt.*;
+
+public class InputForm extends JFrame {
+    private JTextField nameField = new JTextField(12);          // ① 한 줄 입력
+    private JPasswordField pwField = new JPasswordField(12);    // ② 비밀번호 입력
+    private JTextArea logArea = new JTextArea(5, 24);           // ③ 여러 줄 글자
+    private JButton okButton = new JButton("확인");              // ④ 확인 버튼
+
+    public InputForm() {
+        setTitle("입력 받기");
+        setLayout(new BorderLayout(5, 5));
+
+        JPanel formPanel = new JPanel(new GridLayout(2, 2, 5, 5));
+        formPanel.add(new JLabel("이름"));
+        formPanel.add(nameField);
+        formPanel.add(new JLabel("비밀번호"));
+        formPanel.add(pwField);
+
+        logArea.setEditable(false);      // 사용자가 직접 고치지 못하게
+        logArea.setLineWrap(true);       // 줄이 길면 자동 줄바꿈
+        okButton.addActionListener(e -> {
+            String name = nameField.getText();                    // 입력한 글자 읽기
+            int pwLength = pwField.getPassword().length;          // 비밀번호는 char[]로 읽음
+            logArea.append(name + "님, 비밀번호 " + pwLength + "자리를 입력했어요\n");
+            nameField.setText("");                                // 입력칸 비우기
+            pwField.setText("");
+        });
+
+        add(formPanel, BorderLayout.NORTH);
+        add(new JScrollPane(logArea), BorderLayout.CENTER);
+        add(okButton, BorderLayout.SOUTH);
+
+        pack();                                                   // 내용에 맞춰 창 크기 자동 조절
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new InputForm().setVisible(true));
+    }
+}
+</script>
+      <div class="note"><p>입력칸에서 읽은 값은 항상 <code>String</code> 입니다. 숫자가 필요하면 <code>Integer.parseInt(ageField.getText())</code> 처럼 바꿔 쓰고, 숫자가 아닌 값이 들어오는 경우는 <a href="#step-8">8단계</a> <code>addStudent()</code> 처럼 처리합니다.</p></div>
+
+      <div class="screen">
+        <div class="seg" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-panel="shot">실행 화면</button>
+          <button type="button" role="tab" aria-selected="false" data-panel="try">직접 해보기</button>
+        </div>
+        <div class="panel panel-shot">
+          <div class="shot"><img src="assets/img/step3-inputform.png" alt="입력 받기 창. 왼쪽은 이름 김자바와 비밀번호를 입력한 상태, 오른쪽은 확인을 누른 뒤 글자 영역에 '김자바님, 비밀번호 8자리를 입력했어요'가 추가된 상태" loading="lazy"></div>
+          <p class="screen-caption">왼쪽: 이름과 비밀번호를 입력한 상태, 오른쪽: [확인]을 누른 뒤</p>
+        </div>
+        <div class="panel panel-try" hidden>
+          <div class="demo" data-demo="inputform"></div>
+          <p class="screen-caption">이름과 비밀번호를 넣고 [확인]을 누르면 ③에 한 줄이 붙고 ①②가 비워집니다. 여러 번 눌러서 <code>append</code> 가 이어 붙이는 것을 확인하세요.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STEP 4 ================= -->
+    <section class="step" id="step-4" data-step="4">
+      <div class="step-head">
+        <div class="stepno">4</div>
+        <h2>고르기<span>JComboBox, JRadioButton, JCheckBox</span></h2>
+        <label class="done-toggle"><input type="checkbox" data-done="4"> 따라 했어요</label>
+      </div>
+      <p>목록에서 하나를 고를 때는 JComboBox, 몇 개 중 하나만 고를 때는 JRadioButton, 여러 개를 고를 수 있을 때는 JCheckBox를 씁니다. 선택됐는지는 <code>isSelected()</code> 로 확인합니다.</p>
+
+      <table class="ntable">
+        <thead><tr><th>번호</th><th>코드</th><th>화면에서 일어나는 일</th></tr></thead>
+        <tbody>
+          <tr data-n="1"><td><i class="n" data-n="1">1</i></td><td><code>new JComboBox&lt;&gt;(new String[]{...})</code>, <code>getSelectedItem()</code></td><td>누르면 목록이 펼쳐지고 하나를 고름</td></tr>
+          <tr data-n="2"><td><i class="n" data-n="2">2</i></td><td><code>new JRadioButton("큰 컵")</code> + <code>ButtonGroup</code>, <code>isSelected()</code></td><td>둘 중 하나만 선택됨</td></tr>
+          <tr data-n="3"><td><i class="n" data-n="3">3</i></td><td><code>new JCheckBox("샷 추가")</code>, <code>isSelected()</code></td><td>여러 개를 동시에 선택할 수 있음</td></tr>
+          <tr data-n="4"><td><i class="n" data-n="4">4</i></td><td><code>resultLabel.setText(...)</code></td><td>[주문하기]를 누르면 고른 내용이 표시됨</td></tr>
+        </tbody>
+      </table>
+
+      <div class="codeblock" data-code="DrinkOrder.java"></div>
+      <script type="text/x-java" data-file="DrinkOrder.java">
+import javax.swing.*;
+import java.awt.*;
+
+public class DrinkOrder extends JFrame {
+    private JComboBox<String> menuBox =
+            new JComboBox<>(new String[]{"아메리카노", "카페라테", "녹차"});   // ① 목록에서 하나 고르기
+    private JRadioButton smallButton = new JRadioButton("작은 컵", true);   // ② 둘 중 하나만
+    private JRadioButton largeButton = new JRadioButton("큰 컵");
+    private JCheckBox shotBox = new JCheckBox("샷 추가");                   // ③ 여러 개 고를 수 있음
+    private JCheckBox syrupBox = new JCheckBox("시럽 추가");
+    private JButton orderButton = new JButton("주문하기");
+    private JLabel resultLabel = new JLabel("메뉴를 골라 주세요", SwingConstants.CENTER); // ④ 결과
+
+    public DrinkOrder() {
+        setTitle("음료 주문");
+        setLayout(new GridLayout(5, 1));
+
+        JPanel menuPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        menuPanel.add(new JLabel("메뉴"));
+        menuPanel.add(menuBox);
+
+        ButtonGroup sizeGroup = new ButtonGroup();      // 그룹으로 묶어야 하나만 선택됨
+        sizeGroup.add(smallButton);
+        sizeGroup.add(largeButton);
+        JPanel sizePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        sizePanel.add(smallButton);                     // 화면에는 패널에 따로 붙여야 보임
+        sizePanel.add(largeButton);
+
+        JPanel optionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        optionPanel.add(shotBox);
+        optionPanel.add(syrupBox);
+
+        orderButton.addActionListener(e -> {
+            String menu = (String) menuBox.getSelectedItem();     // Object로 나오므로 형변환
+            String size = smallButton.isSelected() ? "작은 컵" : "큰 컵";
+            String option = "";
+            if (shotBox.isSelected()) option += " + 샷";
+            if (syrupBox.isSelected()) option += " + 시럽";
+            resultLabel.setText("주문: " + menu + ", " + size + option);
+        });
+
+        add(menuPanel);
+        add(sizePanel);
+        add(optionPanel);
+        add(orderButton);
+        add(resultLabel);
+
+        setSize(320, 260);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new DrinkOrder().setVisible(true));
+    }
+}
+</script>
+      <div class="note"><p><code>ButtonGroup</code> 은 화면에 보이지 않는 묶음입니다. 라디오 버튼을 그룹에 넣는 것과 별도로, 패널에도 <code>add</code> 해야 화면에 나타납니다.</p></div>
+
+      <div class="screen">
+        <div class="seg" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-panel="shot">실행 화면</button>
+          <button type="button" role="tab" aria-selected="false" data-panel="try">직접 해보기</button>
+        </div>
+        <div class="panel panel-shot">
+          <div class="shot"><img src="assets/img/step4-drinkorder.png" alt="음료 주문 창. 왼쪽은 콤보박스를 눌러 목록이 펼쳐진 모습, 오른쪽은 카페라테, 큰 컵, 샷 추가를 고르고 주문하기를 누른 결과" loading="lazy"></div>
+          <p class="screen-caption">왼쪽: ①을 눌러 목록을 펼친 모습, 오른쪽: 카페라테·큰 컵·샷 추가를 고르고 [주문하기]를 누른 뒤</p>
+        </div>
+        <div class="panel panel-try" hidden>
+          <div class="demo" data-demo="drink"></div>
+          <p class="screen-caption">라디오 버튼은 둘 중 하나만, 체크박스는 여러 개를 고를 수 있습니다. 왼쪽 도구에서 <code>ButtonGroup</code> 을 빼면 라디오 버튼이 어떻게 되는지도 확인해 보세요.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STEP 5 ================= -->
+    <section class="step" id="step-5" data-step="5">
+      <div class="step-head">
+        <div class="stepno">5</div>
+        <h2>목록과 표<span>JList, JTable, JScrollPane</span></h2>
+        <label class="done-toggle"><input type="checkbox" data-done="5"> 따라 했어요</label>
+      </div>
+      <p>목록과 표는 데이터를 모델(<code>DefaultListModel</code>, <code>DefaultTableModel</code>)에 넣고, JList·JTable은 그것을 보여주기만 합니다. 모델에 데이터를 넣거나 빼면 화면이 자동으로 바뀝니다. 둘 다 JScrollPane에 넣어서 붙입니다.</p>
+
+      <div class="substep" data-sub="a">
+      <h3>5-1. 할 일 목록 <code>JList</code></h3>
+      <table class="ntable">
+        <thead><tr><th>번호</th><th>코드</th><th>화면에서 일어나는 일</th></tr></thead>
+        <tbody>
+          <tr data-n="1"><td><i class="n" data-n="1">1</i></td><td><code>inputField</code> + <code>addButton</code> → <code>todoModel.addElement(text)</code></td><td>입력하고 [추가]를 누르면 목록에 한 줄이 생김</td></tr>
+          <tr data-n="2"><td><i class="n" data-n="2">2</i></td><td><code>new JList&lt;&gt;(todoModel)</code>, <code>new JScrollPane(todoList)</code></td><td>목록이 보이고, 길어지면 스크롤이 생김. 클릭한 줄은 파랗게 선택됨</td></tr>
+          <tr data-n="3"><td><i class="n" data-n="3">3</i></td><td><code>getSelectedIndex()</code> → <code>todoModel.remove(index)</code></td><td>선택한 줄이 지워짐. 선택이 없으면 -1</td></tr>
+        </tbody>
+      </table>
+
+      <div class="codeblock" data-code="TodoList.java"></div>
+      <script type="text/x-java" data-file="TodoList.java">
+import javax.swing.*;
+import java.awt.*;
+
+public class TodoList extends JFrame {
+    private DefaultListModel<String> todoModel = new DefaultListModel<>();  // 목록의 데이터
+    private JList<String> todoList = new JList<>(todoModel);                // ② 데이터를 보여주는 목록
+    private JTextField inputField = new JTextField(15);
+    private JButton addButton = new JButton("추가");
+    private JButton removeButton = new JButton("선택 삭제");
+
+    public TodoList() {
+        setTitle("할 일 목록");
+        setLayout(new BorderLayout());
+
+        JPanel inputPanel = new JPanel();                 // ① 입력칸 + 추가 버튼
+        inputPanel.add(inputField);
+        inputPanel.add(addButton);
+
+        addButton.addActionListener(e -> {
+            String text = inputField.getText().trim();
+            if (!text.isEmpty()) {
+                todoModel.addElement(text);               // 모델에 넣으면 목록에 바로 보임
+                inputField.setText("");
+            }
+        });
+
+        removeButton.addActionListener(e -> {             // ③ 선택한 줄 지우기
+            int index = todoList.getSelectedIndex();      // 선택이 없으면 -1
+            if (index != -1) {
+                todoModel.remove(index);
+            }
+        });
+
+        add(inputPanel, BorderLayout.NORTH);
+        add(new JScrollPane(todoList), BorderLayout.CENTER);   // 길어지면 스크롤 생김
+        add(removeButton, BorderLayout.SOUTH);
+
+        setSize(320, 260);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new TodoList().setVisible(true));
+    }
+}
+</script>
+
+      <div class="screen">
+        <div class="seg" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-panel="shot">실행 화면</button>
+          <button type="button" role="tab" aria-selected="false" data-panel="try">직접 해보기</button>
+        </div>
+        <div class="panel panel-shot">
+          <div class="shot"><img src="assets/img/step5-todolist.png" alt="할 일 목록 창. 세 줄을 추가하고 두 번째 줄 '텀 프로젝트 주제 정하기'를 클릭해 파랗게 선택된 상태" loading="lazy"></div>
+          <p class="screen-caption">세 줄을 추가하고 두 번째 줄을 클릭한 상태</p>
+        </div>
+        <div class="panel panel-try" hidden>
+          <div class="demo" data-demo="todo"></div>
+          <p class="screen-caption">할 일을 여러 개 넣어 보고, 아무것도 선택하지 않은 채 [선택 삭제]를 눌러 보세요. <code>getSelectedIndex()</code> 가 -1이라 아무 일도 안 일어납니다.</p>
+        </div>
+      </div>
+      </div>
+
+      <div class="substep" data-sub="b">
+      <h3>5-2. 표 <code>JTable</code></h3>
+      <table class="ntable">
+        <thead><tr><th>번호</th><th>코드</th><th>화면에서 일어나는 일</th></tr></thead>
+        <tbody>
+          <tr data-n="1"><td><i class="n" data-n="1">1</i></td><td><code>String[] columns = {"학번", "이름", "학과"}</code></td><td>표 맨 위 열 제목</td></tr>
+          <tr data-n="2"><td><i class="n" data-n="2">2</i></td><td><code>model.addRow(new Object[]{...})</code></td><td>표에 한 줄(행)이 추가됨</td></tr>
+          <tr><td></td><td><code>new JScrollPane(table)</code></td><td>스크롤 패널에 넣어야 ① 열 제목이 보임</td></tr>
+        </tbody>
+      </table>
+
+      <div class="codeblock" data-code="StudentTable.java"></div>
+      <script type="text/x-java" data-file="StudentTable.java">
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+public class StudentTable extends JFrame {
+
+    public StudentTable() {
+        setTitle("학생 명단");
+
+        String[] columns = {"학번", "이름", "학과"};                        // ① 열 제목
+        DefaultTableModel model = new DefaultTableModel(columns, 0);      // 0 = 처음에는 행 없음
+        model.addRow(new Object[]{"20260001", "김자바", "컴퓨터공학"});      // ② 한 줄씩 추가
+        model.addRow(new Object[]{"20260002", "이객체", "소프트웨어"});
+        model.addRow(new Object[]{"20260003", "박상속", "인공지능"});
+
+        JTable table = new JTable(model);
+        add(new JScrollPane(table));        // 스크롤 패널에 넣어야 열 제목이 보임
+        setSize(360, 160);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new StudentTable().setVisible(true));
+    }
+}
+</script>
+      <div class="note"><p>표의 칸을 더블클릭하면 내용을 고칠 수 있습니다. 줄을 지우는 방법(<code>getSelectedRow()</code>, <code>removeRow()</code>)은 <a href="#step-8">8단계</a>에 나옵니다.</p></div>
+
+      <div class="screen">
+        <div class="seg" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-panel="shot">실행 화면</button>
+          <button type="button" role="tab" aria-selected="false" data-panel="try">직접 해보기</button>
+        </div>
+        <div class="panel panel-shot">
+          <div class="shot"><img src="assets/img/step5-studenttable.png" alt="학생 명단 창. 학번, 이름, 학과 열 제목 아래 세 명의 학생이 표로 나온다" loading="lazy"></div>
+        </div>
+        <div class="panel panel-try" hidden>
+          <div class="demo" data-demo="table"></div>
+          <p class="screen-caption">줄을 클릭하면 선택되고, 칸을 더블클릭하면 내용을 고칠 수 있습니다. 왼쪽 도구에서 <code>JScrollPane</code> 을 빼면 열 제목이 사라지는 것을 확인하세요.</p>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- ================= STEP 6 ================= -->
+    <section class="step" id="step-6" data-step="6">
+      <div class="step-head">
+        <div class="stepno">6</div>
+        <h2>배치하기<span>레이아웃</span></h2>
+        <label class="done-toggle"><input type="checkbox" data-done="6"> 따라 했어요</label>
+      </div>
+      <p>레이아웃은 컴포넌트를 어디에, 어떤 크기로 놓을지 정합니다. 같은 버튼도 레이아웃에 따라 전혀 다르게 놓입니다. 아래 <code>LayoutDemo</code> 를 만들고, ▼▲ 사이만 바꿔 가며 실행해 보세요.</p>
+
+      <div class="codeblock" data-code="LayoutDemo.java"></div>
+      <script type="text/x-java" data-file="LayoutDemo.java">
+import javax.swing.*;
+import java.awt.*;
+
+public class LayoutDemo extends JFrame {
+
+    public LayoutDemo() {
+        setTitle("FlowLayout");
+
+        // ▼ 이 부분만 바꿔 가며 실행해 보세요
+        setLayout(new FlowLayout());
+        for (int i = 1; i <= 5; i++) {
+            add(new JButton("버튼 " + i));
+        }
+        // ▲
+
+        setSize(420, 120);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new LayoutDemo().setVisible(true));
+    }
+}
+</script>
+
+      <h3>FlowLayout: 한 줄로 늘어놓기</h3>
+      <p>버튼이 제 크기 그대로 왼쪽에서 오른쪽으로 놓이고, 자리가 모자라면 다음 줄로 넘어갑니다. 위 코드를 그대로 실행한 뒤 창을 줄여 보세요.</p>
+      <div class="shot"><img src="assets/img/step6-flowlayout.png" alt="FlowLayout 창. 창이 넓을 때는 버튼 5개가 한 줄, 창을 좁히면 버튼 4와 5가 다음 줄로 내려간다" loading="lazy"></div>
+      <p class="screen-caption">왼쪽: 창이 넓을 때, 오른쪽: 창을 좁혔을 때</p>
+
+      <h3>BorderLayout: 동서남북과 가운데</h3>
+      <div class="codeblock" data-code="BorderLayout 부분" data-plain="1"></div>
+      <script type="text/x-java" data-file="LayoutDemo-Border.txt">
+setLayout(new BorderLayout());
+add(new JButton("NORTH"), BorderLayout.NORTH);
+add(new JButton("SOUTH"), BorderLayout.SOUTH);
+add(new JButton("WEST"), BorderLayout.WEST);
+add(new JButton("EAST"), BorderLayout.EAST);
+add(new JButton("CENTER"), BorderLayout.CENTER);
+</script>
+      <p>CENTER가 남는 공간을 모두 차지합니다. 한 구역에는 컴포넌트가 하나만 들어가므로, 여러 개를 넣으려면 <code>JPanel</code> 에 묶어서 넣습니다. 창 크기는 <code>setSize(360, 220)</code> 으로, 창 제목은 BorderLayout으로 바꿨습니다.</p>
+      <div class="shot"><img src="assets/img/step6-borderlayout.png" alt="BorderLayout 창. 위 NORTH, 아래 SOUTH, 왼쪽 WEST, 오른쪽 EAST, 가운데 CENTER 버튼이 창을 가득 채운다" loading="lazy"></div>
+
+      <h3>GridLayout: 같은 크기의 칸</h3>
+      <div class="codeblock" data-code="GridLayout 부분" data-plain="1"></div>
+      <script type="text/x-java" data-file="LayoutDemo-Grid.txt">
+setLayout(new GridLayout(2, 3, 5, 5));   // 2행 3열, 칸 사이 간격 5
+for (int i = 1; i <= 5; i++) {
+    add(new JButton("버튼 " + i));
+}
+</script>
+      <p>모든 칸의 크기가 같고, 왼쪽에서 오른쪽, 위에서 아래 순서로 채워집니다. 버튼이 5개라 마지막 칸은 비어 있습니다. 창 크기는 <code>setSize(360, 160)</code>, 창 제목은 GridLayout입니다.</p>
+      <div class="shot"><img src="assets/img/step6-gridlayout.png" alt="GridLayout 창. 2행 3열 칸에 버튼 1부터 5까지 같은 크기로 놓이고 마지막 칸은 비어 있다" loading="lazy"></div>
+
+      <h3>직접 해보기: 레이아웃 바꿔 보기</h3>
+      <div class="demo" data-demo="layout"></div>
+      <p class="screen-caption">레이아웃을 고르고 창 너비 슬라이더를 움직여 보세요. FlowLayout만 버튼이 다음 줄로 넘어가고, BorderLayout과 GridLayout은 버튼 크기가 창에 맞춰 늘어납니다.</p>
+
+      <h3>언제 무엇을 쓸까</h3>
+      <table>
+        <thead><tr><th>레이아웃</th><th>이럴 때 씁니다</th><th>기본값인 곳</th></tr></thead>
+        <tbody>
+          <tr><td><code>FlowLayout</code></td><td>버튼 몇 개를 한 줄로 놓을 때</td><td><code>JPanel</code></td></tr>
+          <tr><td><code>BorderLayout</code></td><td>화면 전체의 뼈대 (위: 입력, 가운데: 내용, 아래: 버튼)</td><td><code>JFrame</code></td></tr>
+          <tr><td><code>GridLayout</code></td><td>계산기 버튼처럼 같은 크기 칸, "라벨-입력칸" 쌍 (<a href="#step-3">3단계</a>)</td><td>없음</td></tr>
+        </tbody>
+      </table>
+      <p>대부분의 화면은 JFrame을 BorderLayout으로 나누고, 각 구역에 FlowLayout이나 GridLayout JPanel을 넣어 만듭니다. <a href="#step-8">8단계</a> 예제가 그렇게 만들어져 있습니다.</p>
+    </section>
+
+    <!-- ================= STEP 7 ================= -->
+    <section class="step" id="step-7" data-step="7">
+      <div class="step-head">
+        <div class="stepno">7</div>
+        <h2>대화상자와 메뉴<span>JOptionPane, JMenuBar</span></h2>
+        <label class="done-toggle"><input type="checkbox" data-done="7"> 따라 했어요</label>
+      </div>
+      <p>알림·확인·입력 창은 <code>JOptionPane</code> 의 메서드 한 줄로 띄웁니다. 메뉴는 메뉴바(JMenuBar) 안에 메뉴(JMenu), 메뉴 안에 항목(JMenuItem)을 넣는 구조입니다.</p>
+
+      <table class="ntable">
+        <thead><tr><th>번호</th><th>코드</th><th>화면에서 일어나는 일</th></tr></thead>
+        <tbody>
+          <tr data-n="1"><td><i class="n" data-n="1">1</i></td><td><code>JMenuBar</code> &gt; <code>JMenu("파일")</code> &gt; <code>JMenuItem("새로 만들기")</code>, <code>setJMenuBar(menuBar)</code></td><td>창 위쪽에 메뉴가 생기고, 누르면 항목이 펼쳐짐</td></tr>
+          <tr data-n="2"><td><i class="n" data-n="2">2</i></td><td><code>JOptionPane.showMessageDialog(this, "저장되었습니다.")</code></td><td>[확인] 버튼만 있는 알림 창</td></tr>
+          <tr data-n="3"><td><i class="n" data-n="3">3</i></td><td><code>JOptionPane.showConfirmDialog(this, "정말 삭제할까요?")</code></td><td>예/아니오/취소 창. 누른 버튼이 <code>int</code> 로 돌아옴 (<code>JOptionPane.YES_OPTION</code> 등)</td></tr>
+          <tr data-n="4"><td><i class="n" data-n="4">4</i></td><td><code>JOptionPane.showInputDialog(this, "이름을 입력하세요")</code></td><td>입력 창. 입력한 글자가 <code>String</code> 으로 돌아오고, [취소]를 누르면 <code>null</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="codeblock" data-code="DialogMenuDemo.java"></div>
+      <script type="text/x-java" data-file="DialogMenuDemo.java">
+import javax.swing.*;
+import java.awt.*;
+
+public class DialogMenuDemo extends JFrame {
+    private JLabel statusLabel = new JLabel("메뉴나 버튼을 눌러 보세요", SwingConstants.CENTER);
+
+    public DialogMenuDemo() {
+        setTitle("대화상자와 메뉴");
+        setLayout(new BorderLayout());
+
+        // ① 메뉴: 메뉴바 > 메뉴 > 메뉴 항목
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("파일");
+        JMenuItem newItem = new JMenuItem("새로 만들기");
+        JMenuItem exitItem = new JMenuItem("종료");
+        newItem.addActionListener(e -> statusLabel.setText("새로 만들기를 눌렀어요"));
+        exitItem.addActionListener(e -> System.exit(0));
+        fileMenu.add(newItem);
+        fileMenu.addSeparator();                         // 구분선
+        fileMenu.add(exitItem);
+        menuBar.add(fileMenu);
+        setJMenuBar(menuBar);                            // add가 아니라 setJMenuBar
+
+        JButton messageButton = new JButton("알림");
+        JButton confirmButton = new JButton("확인");
+        JButton inputButton = new JButton("입력");
+
+        // ② 알림 창
+        messageButton.addActionListener(e ->
+                JOptionPane.showMessageDialog(this, "저장되었습니다."));
+
+        // ③ 예 / 아니오 / 취소 창
+        confirmButton.addActionListener(e -> {
+            int answer = JOptionPane.showConfirmDialog(this, "정말 삭제할까요?");
+            if (answer == JOptionPane.YES_OPTION) {
+                statusLabel.setText("삭제했어요");
+            }
+        });
+
+        // ④ 입력 창
+        inputButton.addActionListener(e -> {
+            String name = JOptionPane.showInputDialog(this, "이름을 입력하세요");
+            if (name != null) {                          // 취소를 누르면 null
+                statusLabel.setText(name + "님, 안녕하세요");
+            }
+        });
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(messageButton);
+        buttonPanel.add(confirmButton);
+        buttonPanel.add(inputButton);
+
+        add(statusLabel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        setSize(340, 220);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new DialogMenuDemo().setVisible(true));
+    }
+}
+</script>
+      <div class="note"><p>대화상자가 떠 있는 동안 코드는 다음 줄로 넘어가지 않고, 사용자가 버튼을 누를 때까지 기다립니다. 버튼 글자(예, 아니오, 취소)와 창 제목은 컴퓨터 언어 설정에 따라 영어(Yes, No, Cancel)로 나올 수도 있습니다.</p></div>
+
+      <div class="screen">
+        <div class="seg" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-panel="shot">실행 화면</button>
+          <button type="button" role="tab" aria-selected="false" data-panel="try">직접 해보기</button>
+        </div>
+        <div class="panel panel-shot">
+          <div class="shots">
+            <figure><div class="shot"><img src="assets/img/step7-menu.png" alt="대화상자와 메뉴 창에서 파일 메뉴를 눌러 새로 만들기와 종료 항목이 펼쳐진 모습" loading="lazy"></div><figcaption>① [파일] 메뉴를 누른 모습</figcaption></figure>
+            <figure><div class="shot"><img src="assets/img/step7-dialogs.png" alt="세 개의 대화상자. ② 저장되었습니다 알림, ③ 정말 삭제할까요 예/아니오/취소, ④ 이름을 입력하세요 입력 창" loading="lazy"></div><figcaption>②③④ 각 버튼을 눌렀을 때 뜨는 창</figcaption></figure>
+          </div>
+        </div>
+        <div class="panel panel-try" hidden>
+          <div class="demo" data-demo="dialog"></div>
+          <p class="screen-caption">[확인] 창에서 예·아니오·취소를 각각 눌러 보고, [입력] 창에서 [취소]를 눌렀을 때 글자가 바뀌지 않는 것을 확인하세요. 메뉴의 [종료]는 <code>System.exit(0)</code> 이라 프로그램이 끝납니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STEP 8 ================= -->
+    <section class="step" id="step-8" data-step="8">
+      <div class="step-head">
+        <div class="stepno">8</div>
+        <h2>종합 예제<span>성적 관리 프로그램</span></h2>
+        <label class="done-toggle"><input type="checkbox" data-done="8"> 따라 했어요</label>
+      </div>
+      <p>지금까지 배운 것을 합친 프로그램입니다. 파일을 3개로 나눠서 화면을 맡는 클래스와 데이터를 맡는 클래스를 분리했습니다. 텀 프로젝트도 이렇게 나누면 화면을 바꿔도 계산 코드는 그대로 두고 고칠 수 있습니다.</p>
+
+      <table>
+        <thead><tr><th>파일</th><th>맡은 일</th></tr></thead>
+        <tbody>
+          <tr><td><code>Student.java</code></td><td>학생 한 명의 이름과 점수</td></tr>
+          <tr><td><code>GradeBook.java</code></td><td>학생 목록 저장, 추가·삭제, 평균 계산 (화면 코드 없음)</td></tr>
+          <tr><td><code>GradeManager.java</code></td><td>화면. 버튼이 눌리면 GradeBook의 메서드를 부르고 결과를 표시</td></tr>
+        </tbody>
+      </table>
+
+      <table class="ntable">
+        <thead><tr><th>번호</th><th>코드</th><th>화면에서 일어나는 일</th><th>복습</th></tr></thead>
+        <tbody>
+          <tr data-n="1"><td><i class="n" data-n="1">1</i></td><td><code>JPanel</code> + <code>JLabel</code>, <code>JTextField</code>, <code>JButton("추가")</code></td><td>이름·점수를 입력하고 [추가]를 누르면 ②에 한 줄이 생김</td><td class="review"><a href="#step-2">2</a>·<a href="#step-3">3단계</a></td></tr>
+          <tr data-n="2"><td><i class="n" data-n="2">2</i></td><td><code>JTable</code> + <code>DefaultTableModel</code> + <code>JScrollPane</code></td><td>학생 목록 표. 클릭하면 줄이 선택됨</td><td class="review"><a href="#step-5">5단계</a></td></tr>
+          <tr data-n="3"><td><i class="n" data-n="3">3</i></td><td><code>averageLabel.setText(String.format(...))</code></td><td>추가·삭제할 때마다 평균이 다시 계산됨</td><td class="review"><a href="#step-2">2단계</a></td></tr>
+          <tr data-n="4"><td><i class="n" data-n="4">4</i></td><td><code>getSelectedRow()</code> → <code>removeRow(row)</code></td><td>선택한 줄이 지워짐</td><td class="review"><a href="#step-5">5단계</a></td></tr>
+          <tr><td></td><td><code>Integer.parseInt</code> + <code>try-catch</code> + <code>showMessageDialog</code></td><td>점수에 숫자가 아닌 값을 넣으면 알림 창이 뜸</td><td class="review"><a href="#step-7">7단계</a></td></tr>
+          <tr><td></td><td><code>BorderLayout</code>: ① NORTH, ② CENTER, ③④ SOUTH</td><td>화면 뼈대</td><td class="review"><a href="#step-6">6단계</a></td></tr>
+        </tbody>
+      </table>
+      <p>세 파일을 같은 폴더에 만들고 <code>GradeManager</code> 를 실행합니다.</p>
+
+      <div class="codeblock" data-code="Student.java"></div>
+      <script type="text/x-java" data-file="Student.java">
+// Student.java
+public class Student {
+    private String name;
+    private int score;
+
+    public Student(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+
+    public String getName() { return name; }
+    public int getScore() { return score; }
+}
+</script>
+
+      <div class="codeblock" data-code="GradeBook.java"></div>
+      <script type="text/x-java" data-file="GradeBook.java">
+// GradeBook.java
+import java.util.ArrayList;
+import java.util.List;
+
+// 화면과 상관없이 데이터 저장과 계산만 맡는 클래스
+public class GradeBook {
+    private List<Student> students = new ArrayList<>();
+
+    public void add(Student s) {
+        students.add(s);
+    }
+
+    public void remove(int index) {
+        students.remove(index);
+    }
+
+    public double average() {
+        if (students.isEmpty()) return 0;
+        int sum = 0;
+        for (Student s : students) {
+            sum += s.getScore();
+        }
+        return (double) sum / students.size();
+    }
+}
+</script>
+
+      <div class="codeblock" data-code="GradeManager.java"></div>
+      <script type="text/x-java" data-file="GradeManager.java">
+// GradeManager.java
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+
+// 화면(GUI)만 맡는 클래스. 저장과 계산은 GradeBook에게 맡긴다.
+public class GradeManager extends JFrame {
+    private GradeBook book = new GradeBook();
+    private JTextField nameField = new JTextField(8);
+    private JTextField scoreField = new JTextField(4);
+    private DefaultTableModel tableModel = new DefaultTableModel(new String[]{"이름", "점수"}, 0);
+    private JTable table = new JTable(tableModel);
+    private JLabel averageLabel = new JLabel("평균: 0.0점");
+
+    public GradeManager() {
+        setTitle("성적 관리");
+        setLayout(new BorderLayout(5, 5));
+
+        // ① 위쪽: 입력 영역
+        JPanel inputPanel = new JPanel();
+        JButton addButton = new JButton("추가");
+        inputPanel.add(new JLabel("이름"));
+        inputPanel.add(nameField);
+        inputPanel.add(new JLabel("점수"));
+        inputPanel.add(scoreField);
+        inputPanel.add(addButton);
+
+        // ③④ 아래쪽: 평균과 삭제 버튼
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        JButton deleteButton = new JButton("선택 삭제");
+        bottomPanel.add(averageLabel, BorderLayout.WEST);
+        bottomPanel.add(deleteButton, BorderLayout.EAST);
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 5, 5));
+
+        addButton.addActionListener(e -> addStudent());
+        deleteButton.addActionListener(e -> deleteStudent());
+
+        add(inputPanel, BorderLayout.NORTH);
+        add(new JScrollPane(table), BorderLayout.CENTER);     // ② 가운데: 표
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        setSize(380, 300);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    private void addStudent() {
+        String name = nameField.getText().trim();
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "이름을 입력하세요.");
+            return;
+        }
+        try {
+            int score = Integer.parseInt(scoreField.getText().trim());
+            book.add(new Student(name, score));                 // 데이터는 GradeBook에
+            tableModel.addRow(new Object[]{name, score});       // 화면은 표에
+            updateAverage();
+            nameField.setText("");
+            scoreField.setText("");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "점수는 숫자로 입력하세요.");
+        }
+    }
+
+    private void deleteStudent() {                              // ④ 선택 삭제
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "삭제할 줄을 먼저 선택하세요.");
+            return;
+        }
+        book.remove(row);
+        tableModel.removeRow(row);
+        updateAverage();
+    }
+
+    private void updateAverage() {                              // ③ 평균 표시
+        averageLabel.setText(String.format("평균: %.1f점", book.average()));
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new GradeManager().setVisible(true));
+    }
+}
+</script>
+
+      <div class="screen">
+        <div class="seg" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-panel="shot">실행 화면</button>
+          <button type="button" role="tab" aria-selected="false" data-panel="try">직접 해보기</button>
+        </div>
+        <div class="panel panel-shot">
+          <div class="shot"><img src="assets/img/step8-grademanager.png" alt="성적 관리 창. 위에 이름·점수 입력칸과 추가 버튼, 가운데에 학생 4명이 들어간 표, 아래에 평균 87.8점과 선택 삭제 버튼" loading="lazy"></div>
+          <p class="screen-caption">김자바 92, 이객체 85, 박상속 78, 최다형 96을 추가하고 세 번째 줄을 선택한 상태</p>
+        </div>
+        <div class="panel panel-try" hidden>
+          <div class="demo" data-demo="grade"></div>
+          <p class="screen-caption">점수에 "A"처럼 숫자가 아닌 값을 넣어 보세요. <code>NumberFormatException</code> 을 <code>try-catch</code> 로 잡아서 알림 창이 뜹니다. 아무 줄도 고르지 않고 [선택 삭제]를 눌러도 알림이 뜹니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TROUBLESHOOTING ================= -->
+    <section class="step" id="trouble">
+      <div class="step-head">
+        <div class="stepno">?</div>
+        <h2>막혔을 때 확인할 것</h2>
+      </div>
+      <p>실행 화면이 예제와 다르면 아래 표에서 증상을 찾아보세요.</p>
+      <div class="filter">
+        <input type="search" id="trouble-filter" placeholder="증상 검색 (예: 창, 라디오, 한글)" aria-label="증상 검색">
+        <span class="count" id="trouble-count"></span>
+      </div>
+      <table class="trouble" id="trouble-table">
+        <thead><tr><th>증상</th><th>확인할 것</th></tr></thead>
+        <tbody>
+          <tr><td>실행했는데 창이 안 뜸</td><td><code>main</code> 에 <code>setVisible(true)</code> 가 있는지</td></tr>
+          <tr><td>창은 뜨는데 비어 있음</td><td>컴포넌트를 <code>add</code> 했는지, <code>setVisible(true)</code> 보다 먼저 <code>add</code> 했는지</td></tr>
+          <tr><td>창을 닫아도 프로그램이 안 끝남</td><td><code>setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)</code> 가 있는지 (<a href="#step-1">1단계</a>)</td></tr>
+          <tr><td>컴포넌트가 하나만 보임</td><td><code>BorderLayout</code> 에서 위치 없이 <code>add</code> 하면 모두 CENTER에 겹침. <code>add(comp, BorderLayout.SOUTH)</code> 처럼 위치를 적기</td></tr>
+          <tr><td>라디오 버튼이 여러 개 선택됨</td><td><code>ButtonGroup</code> 에 넣었는지 (<a href="#step-4">4단계</a>)</td></tr>
+          <tr><td>라디오 버튼이 화면에 없음</td><td><code>ButtonGroup</code> 과 별도로 패널에도 <code>add</code> 했는지</td></tr>
+          <tr><td>표에 열 제목이 안 보임</td><td><code>new JScrollPane(table)</code> 로 감싸서 붙였는지 (<a href="#step-5">5단계</a>)</td></tr>
+          <tr><td>숫자를 입력하면 빨간 오류 (<code>NumberFormatException</code>)</td><td><code>Integer.parseInt</code> 를 <code>try-catch</code> 로 감쌌는지 (<a href="#step-8">8단계</a> <code>addStudent</code>)</td></tr>
+          <tr><td><code>catch (Exception e)</code> 에서 컴파일 오류</td><td>람다의 <code>e</code> 와 이름이 겹침. <code>ex</code> 처럼 다른 이름으로</td></tr>
+          <tr><td>한글이 깨져서 나옴</td><td>소스 파일을 UTF-8로 저장했는지, 터미널이라면 <code>javac -encoding UTF-8</code> 로 컴파일했는지</td></tr>
+          <tr><td>창 크기를 바꾸면 화면이 엉망이 됨</td><td><code>setLayout(null)</code> 과 좌표 대신 레이아웃을 쓰기 (<a href="#step-6">6단계</a>)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      <p>이 페이지의 "직접 해보기" 창은 Java가 아니라 브라우저가 흉내 낸 것입니다. 실제 동작은 반드시 여러분 컴퓨터에서 코드를 실행해 확인하세요.</p>
+    </footer>
+  </main>
+</div>
+
+<noscript><p style="padding:16px;text-align:center">코드와 직접 해보기 창을 보려면 JavaScript를 켜 주세요.</p></noscript>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
